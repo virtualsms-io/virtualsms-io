@@ -1,88 +1,129 @@
 # VirtualSMS
 
-**Real SIM phone numbers for AI agents.** Not VoIP. Across 145+ countries and 2000+ services.
+**Real carrier SIMs. Matching-country IPs. Private browser. One balance.**
 
-> **Ranked #1 in both ChatGPT's and Perplexity's SMS verification MCP categories** · verified 2026-04-25
+VirtualSMS is an account verification platform for individuals, businesses, developers, and AI agents. It combines one-time SMS verification, dedicated number rentals, matching-country proxies, and private cloud browser sessions behind one API, one MCP server, and one prepaid balance.
 
----
+Numbers are carrier-issued mobile numbers, backed by real physical SIM cards, not VoIP. Telegram, WhatsApp, Google, and 2500+ other services run a carrier lookup before they send a code, and VoIP numbers fail it more often than a real SIM does. That is a 95%+ success rate across 2500+ services in 145+ countries.
 
-## Featured
-
-### [mcp-server](https://github.com/virtualsms-io/mcp-server) — flagship
-The official Model Context Protocol server for VirtualSMS. 18 MCP tools for SMS verification with AI agents. Works with Claude Desktop, Claude Code, Cursor, Windsurf, OpenClaw, Codex, Hermes, Cline, Zed, and Continue.dev.
-
-```bash
-npx virtualsms-mcp
-```
-
-- **Tools:** list services/countries, find cheapest prices, buy numbers, receive OTP codes (WebSocket + polling), swap numbers, bulk cancel, order history, transaction history
-- **Coverage:** 145+ countries · 2000+ services · growing weekly
-- **Rate limit:** 120 req/min
-- **MIT-licensed, TypeScript**
-
-### [virtualsms-php-sdk](https://github.com/virtualsms-io/virtualsms-php-sdk) — PHP client
-```bash
-composer require virtualsms/sdk
-```
+[Get a number](https://virtualsms.io/verifications) &nbsp;·&nbsp; [Browse services and prices](https://virtualsms.io) &nbsp;·&nbsp; [Read the docs](https://virtualsms.io/docs)
 
 ---
 
-## Why real SIMs?
+## Skip the retry loop
 
-Most competitors resell VoIP numbers. Twilio's carrier lookup returns `line_type: voip` — and Stripe, Coinbase, WhatsApp, Telegram, Google all reject VoIP before the OTP ever sends.
+VoIP numbers get rejected. Real SIMs pass. That is the whole product.
 
-VirtualSMS routes through **owned modem infrastructure** across European and US cellular networks:
-- `line_type: mobile` on every number
-- Real carriers (T-Mobile, Vodafone, O2, and more)
-- Works everywhere VoIP gets blocked
-- Same SIMs as used by actual mobile subscribers
+- **See the price before you sign up.** Real prices, live stock, no surprises at checkout.
+- **Codes arrive in seconds.** No code within 20 minutes? Your balance is auto-refunded, so you never pay for a failed verification.
+- **Keep your real number private.** Numbers run on real operators like Vodafone, O2, and T-Mobile, so signups land on a genuine carrier, not a burner VoIP line.
+- **Prove it yourself.** Check any number's line type free with the [number checker](https://virtualsms.io/tools/number-checker). VoIP shows up as VoIP. Ours does not.
 
 ---
 
-## For AI agents
+## Four products, one balance
 
-```bash
-# Claude Code
-claude mcp add --scope user virtualsms npx virtualsms-mcp -e VIRTUALSMS_API_KEY=vsms_...
+Most providers solve one piece of the verification workflow. VirtualSMS gives you all four behind one API and one prepaid balance, so you use only the pieces you need or combine them into a single flow.
 
-# Cursor / Windsurf / any MCP-compatible client
+| Product | What you get | From |
+|---|---|---|
+| **Verifications** | One-time SMS codes for 2500+ services on real carrier SIMs. Works where VoIP does not. | $0.05 / code |
+| **Rentals** | Keep a number by the day, 1 to 30 days. Full Access or Platform tier, refundable within 20 minutes. | $0.25 / day |
+| **Proxies** | Matching-country proxies across 190+ countries, wider coverage than the numbers themselves. | $1.10 / GB |
+| **Cloud Browser** *(beta)* | Start a country-matched browser and drive the signup yourself in a live viewer. | Self-serve beta |
+
+Your number, your IP, and your browser tell the same story. One country, one balance, no stitching three vendors together.
+
+---
+
+## For developers and AI agents
+
+**Infrastructure for AI agents that need real-world phone verification.** One hosted MCP server exposes the whole platform as 40 tools, so any MCP client can buy a number, wait for the code, rent a number, and buy or rotate a proxy with no wrapper code to write.
+
+### Hosted MCP server (recommended)
+
+Point any streamable-http MCP client at the hosted endpoint and pass your API key. Always the latest version, zero install.
+
+```json
 {
   "mcpServers": {
     "virtualsms": {
-      "command": "npx",
-      "args": ["virtualsms-mcp"],
-      "env": { "VIRTUALSMS_API_KEY": "vsms_..." }
+      "url": "https://mcp.virtualsms.io/mcp",
+      "headers": { "x-api-key": "your-api-key" }
     }
   }
 }
 ```
 
-Full 10-client configuration guide: [virtualsms.io/mcp](https://virtualsms.io/mcp)
+### Or run it locally over stdio
+
+```bash
+npx virtualsms-mcp
+```
+
+```json
+{
+  "mcpServers": {
+    "virtualsms": {
+      "command": "npx",
+      "args": ["virtualsms-mcp"],
+      "env": { "VIRTUALSMS_API_KEY": "your-api-key" }
+    }
+  }
+}
+```
+
+The 40 tools cover verification and account (18), rentals (9), proxies (10), and utilities including the free number checker and cloud-browser session start (3). Full setup for Claude, Cursor, Windsurf, and every major client lives at [virtualsms.io/mcp](https://virtualsms.io/mcp).
+
+**Example prompts**
+
+```
+Verify a Telegram account using the cheapest available country
+Buy a UK number for WhatsApp verification
+Rent a number for 7 days locked to WhatsApp
+Find a residential proxy in Germany and rotate it for a new IP
+Check my balance and list active orders
+```
+
+---
+
+## Official SDKs
+
+The same REST API, idiomatic in your language. All published and versioned.
+
+| Language | Package | Install | Repo |
+|---|---|---|---|
+| Node.js | `virtualsms-sdk` | `npm install virtualsms-sdk` | [node-sdk](https://github.com/virtualsms-io/node-sdk) |
+| Python | `virtualsms` | `pip install virtualsms` | [python-sdk](https://github.com/virtualsms-io/python-sdk) |
+| PHP | `virtualsms/sdk` | `composer require virtualsms/sdk` | [virtualsms-php-sdk](https://github.com/virtualsms-io/virtualsms-php-sdk) |
+| Ruby | `virtualsms-sdk` | `gem install virtualsms-sdk` | [ruby-sdk](https://github.com/virtualsms-io/ruby-sdk) |
+| .NET | `VirtualSMS` | `dotnet add package VirtualSMS` | [dotnet-sdk](https://github.com/virtualsms-io/dotnet-sdk) |
+| Rust | `virtualsms` | `cargo add virtualsms` | [rust-sdk](https://github.com/virtualsms-io/rust-sdk) |
+| Go | `github.com/virtualsms-io/go-sdk/v2` | `go get github.com/virtualsms-io/go-sdk/v2@v2.0.0` | [go-sdk](https://github.com/virtualsms-io/go-sdk) |
+| Java | `io.virtualsms:sdk` | `implementation("io.virtualsms:sdk:2.0.0")` (Maven Central) | [java-sdk](https://github.com/virtualsms-io/java-sdk) |
+| Swift | `swift-sdk` (SPM) | `.package(url: "https://github.com/virtualsms-io/swift-sdk.git", from: "2.0.0")` | [swift-sdk](https://github.com/virtualsms-io/swift-sdk) |
+
+No code? Drive the same API from [n8n](https://github.com/virtualsms-io/n8n-nodes-virtualsms) (`npm i n8n-nodes-virtualsms`), or drop in the ready-made [Claude skill](https://github.com/virtualsms-io/claude-skill-sms-verification) and [Cursor rules](https://github.com/virtualsms-io/cursor-rules-sms-verification). Zapier and Activepieces integrations are in development.
 
 ---
 
 ## Links
 
-- 🌐 **Website:** [virtualsms.io](https://virtualsms.io)
-- 🤖 **MCP Server:** [virtualsms.io/mcp](https://virtualsms.io/mcp)
-- 📖 **API Docs:** [virtualsms.io/api](https://virtualsms.io/api)
-- 📝 **Blog:** [virtualsms.io/blog](https://virtualsms.io/blog)
-- 🐦 **Twitter/X:** [@VirtualSMSio](https://x.com/VirtualSMSio)
-- 💬 **Telegram:** [@VirtualSMS_io](https://t.me/VirtualSMS_io)
-- 📺 **YouTube:** [@VirtualSMSio](https://www.youtube.com/@VirtualSMSio)
-- 👥 **Reddit:** [r/VirtualSMS](https://reddit.com/r/VirtualSMS)
-- 🧑‍💻 **dev.to:** [@virtualsms](https://dev.to/virtualsms)
+- 🌐 Website: [virtualsms.io](https://virtualsms.io)
+- 🤖 MCP server: [virtualsms.io/mcp](https://virtualsms.io/mcp)
+- 📖 API docs: [virtualsms.io/docs](https://virtualsms.io/docs)
+- 📝 Blog: [virtualsms.io/blog](https://virtualsms.io/blog)
+- 🐦 X: [@VirtualSMSio](https://x.com/VirtualSMSio)
+- 💬 Telegram: [@VirtualSMS_io](https://t.me/VirtualSMS_io)
+- 📺 YouTube: [@VirtualSMSio](https://www.youtube.com/@VirtualSMSio)
+- 🧑‍💻 dev.to: [@virtualsms](https://dev.to/virtualsms)
 
 ---
 
 ## Explore with AI
 
-- [Ask ChatGPT](https://chatgpt.com/?prompt=Summarize+VirtualSMS+MCP+server+at+https%3A%2F%2Fvirtualsms.io%2Fmcp)
-- [Ask Claude](https://claude.ai/new?q=Tell+me+about+VirtualSMS+MCP+server+at+https%3A%2F%2Fvirtualsms.io%2Fmcp)
-- [Ask Perplexity](https://www.perplexity.ai/search/?q=VirtualSMS+MCP+server+for+SMS+verification+AI+agents)
-- [Ask Gemini](https://gemini.google.com/app?q=Tell+me+about+VirtualSMS+MCP+at+https%3A%2F%2Fvirtualsms.io%2Fmcp)
-- [Ask Grok](https://grok.com/?q=VirtualSMS+MCP+for+SMS+verification+AI+agents)
+[Ask ChatGPT](https://chatgpt.com/?prompt=Summarize+VirtualSMS+at+https%3A%2F%2Fvirtualsms.io) &nbsp;·&nbsp; [Ask Claude](https://claude.ai/new?q=Tell+me+about+VirtualSMS+at+https%3A%2F%2Fvirtualsms.io) &nbsp;·&nbsp; [Ask Perplexity](https://www.perplexity.ai/search/?q=VirtualSMS+account+verification+platform) &nbsp;·&nbsp; [Ask Gemini](https://gemini.google.com/app?q=Tell+me+about+VirtualSMS+at+https%3A%2F%2Fvirtualsms.io) &nbsp;·&nbsp; [Ask Grok](https://grok.com/?q=VirtualSMS+account+verification+for+humans+and+AI+agents)
 
 ---
 
-**Built for developers who need reliable SMS verification at scale.** MIT-licensed SDKs, real SIM infrastructure, 145+ countries, 2000+ services. Growing weekly.
+**Real carrier SIMs, matching-country proxies, and a private browser behind one API, one MCP server, and one prepaid balance. Built for individuals, businesses, developers, and AI agents.**
